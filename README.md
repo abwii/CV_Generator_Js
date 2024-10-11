@@ -2,7 +2,7 @@ Générateur de CV
 Auteurs :
 Wassim Bacha
 Gina Shirin Palesch
-Jimmy
+Jimmy LETTE VOUETO
 
 Ce projet a été réalisé par Wassim, Gina et Jimmy dans le cadre d'un projet de groupe à l'issue d'un cours couvrant Node.js, Express, MongoDB et React.
 Description du projet
