@@ -1,0 +1,24 @@
+{
+  "name": "cv_generator_js",
+  "version": "1.0.0",
+  "description": "Générateur de CV\r Auteurs :\r Wassim Bacha\r Gina Shirin Palesch\r Jimmy Lionel LETTE VOUETO",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon ./backend/server.js"
+  },
+  "keywords": [],
+  "author": "wb, gina, jimmy",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
