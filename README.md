@@ -1,7 +1,7 @@
 Générateur de CV
 Auteurs :
 Wassim Bacha
-Gina Palesch
+Gina Shirin Palesch
 Jimmy
 
 Ce projet a été réalisé par Wassim, Gina et Jimmy dans le cadre d'un projet de groupe à l'issue d'un cours couvrant Node.js, Express, MongoDB et React.
