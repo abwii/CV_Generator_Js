@@ -22,3 +22,6 @@ app.get("/", (req, res) => {
 // Recuperation des definitions de routes
 app.use("/", Router);
 app.listen(port, () => console.log("Le serveur a démarré au port " + port));
+
+const commentRoutes = require('./routes/commentRoutes');
+app.use('/api', commentRoutes);  // Toutes les routes pour les commentaires seront accessibles via /api/comments
