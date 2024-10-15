@@ -67,7 +67,7 @@ const cvSchema = new mongoose.Schema(
         }
       },
     ],
-    skills: [String],
+    skills: [String], //required todo
     visible: {
       type: Boolean,
       default: true
