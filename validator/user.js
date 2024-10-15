@@ -11,12 +11,12 @@ module.exports = {
       properties: {
         nom: {
           type: "string",
-          minLength: 3,
+          minLength: 1,
           errorMessage: "Firstname is invalid",
         },
         prenom: {
           type: "string",
-          minLength: 3,
+          minLength: 1,
           errorMessage: "Lastname is invalid",
         },
         email: {
