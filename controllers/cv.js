@@ -1,4 +1,4 @@
-const CVModel = require("../models/CVs");
+const CVModel = require("../models/CV");
 UserModel = require('./../models/User');
 const { verifyCV } = require('../validator/cv');
 
