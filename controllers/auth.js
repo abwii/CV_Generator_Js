@@ -9,7 +9,7 @@ module.exports = {
     try {
       // Validation des données
       verifyUser(req.body);
-      const { nom, prenom, email, numeroTel, password, ville, photoProfil } =
+      const { firstname, lastname, email, phone, password, address, picture } =
         req.body;
 
       // Hashage du mot de passe
@@ -17,13 +17,13 @@ module.exports = {
 
       // Création d'un nouvel utilisateur
       const newUser = new UserModel({
-        nom,
-        prenom,
+        firstname,
+        lastname,
         email,
-        numeroTel,
+        phone,
         password: hash,
-        ville, // Optionnel
-        photoProfil, // Optionnel
+        address, // Optionnel
+        picture, // Optionnel
       });
 
       // Sauvegarde de l'utilisateur
@@ -32,12 +32,12 @@ module.exports = {
       // Réponse avec les informations de l'utilisateur
       res.status(201).send({
         id: newUser._id,
-        nom: newUser.nom,
-        prenom: newUser.prenom,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
         email: newUser.email,
-        numeroTel: newUser.numeroTel,
-        ville: newUser.ville,
-        photoProfil: newUser.photoProfil,
+        phone: newUser.phone,
+        address: newUser.address,
+        picture: newUser.picture,
       });
     } catch (error) {
       res.send({
@@ -84,8 +84,8 @@ module.exports = {
         message: "Connexion réussie",
         user: {
           id: user._id,
-          nom: user.nom,
-          prenom: user.prenom,
+          firstname: user.firstname,
+          lastname: user.lastname,
           token,
         },
       });

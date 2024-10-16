@@ -9,14 +9,14 @@ module.exports = {
     let userSchema = {
       type: "object",
       properties: {
-        nom: {
+        firstname: {
           type: "string",
-          minLength: 3,
+          minLength: 1,
           errorMessage: "Firstname is invalid",
         },
-        prenom: {
+        lastname: {
           type: "string",
-          minLength: 3,
+          minLength: 1,
           errorMessage: "Lastname is invalid",
         },
         email: {
@@ -24,7 +24,7 @@ module.exports = {
           format: "email",
           errorMessage: "email is invalid",
         },
-        numeroTel: {
+        phone: {
           type: "string", // Type de donnée
           minLength: 10, // Longueur minimale (peut être ajustée selon les besoins)
           maxLength: 15, // Longueur maximale (pour permettre des formats variés)
@@ -38,7 +38,7 @@ module.exports = {
           pattern: "^(?=.*[A-Z])(?=.*[0-9]).+$", // Le password doit contenir au moins une majuscule et 1 chiffre
         },
       },
-      required: ["nom", "prenom", "email", "numeroTel", "password"],
+      required: ["firstname", "lastname", "email", "phone", "password"],
     };
 
     let result = validator.validate(user, userSchema);
