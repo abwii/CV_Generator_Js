@@ -19,7 +19,7 @@ Projet d'école, site de génération et de partage de CV en NodeJS.
 - Consulter les CV des autres
 - Commenter les CV
 
-L'application Générateur de CV permet aux utilisateurs de créer, gérer et consulter des CV en ligne. Les utilisateurs peuvent également laisser des recommandations sur les CV d'autres utilisateurs authentifiés. L'application est sécurisée grâce à un système d'authentification via JWT. Fonctionnalités principales
+L'application Générateur de CV permet aux utilisateurs de créer, gérer et consulter des CV en ligne. Les utilisateurs peuvent également laisser des commentaires sur les CV d'autres utilisateurs authentifiés. L'application est sécurisée grâce à un système d'authentification via JWT.
 ## Tech Stack
 
 **Front-end:** React
