@@ -1,19 +1,19 @@
-module.exports = function validateComment(comment) {
+module.exports = function validateComment(content) {
     let errors = [];
   
-    // Vérifier que comment est défini
-    if (!comment) {
+    // Vérifier que content est défini
+    if (!content) {
       errors.push('Le commentaire est requis.');
-      return errors; // Retourner immédiatement si comment est indéfini
+      return errors; // Retourner immédiatement si content est indéfini
     }
   
     // Vérifier que le commentaire n'est pas vide
-    if (comment.trim() === '') {
+    if (content.trim() === '') {
       errors.push('Le commentaire ne peut pas être vide.');
     }
   
     // Vérifier que le commentaire ne dépasse pas 500 caractères
-    if (comment.length > 500) {
+    if (content.length > 500) {
       errors.push('Le commentaire ne peut pas dépasser 500 caractères.');
     }
   

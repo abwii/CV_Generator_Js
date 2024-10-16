@@ -24,4 +24,4 @@ app.use("/", Router);
 app.listen(port, () => console.log("Le serveur a démarré au port " + port));
 
 const commentRoutes = require('./routes/comment');
-app.use('/api', commentRoutes);  // Toutes les routes pour les commentaires seront accessibles via /api/comments
+app.use('/api/comment', commentRoutes); 
