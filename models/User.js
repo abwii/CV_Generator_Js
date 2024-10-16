@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     photoProfil: {
-      type: String,
+      type: String, // bonus : upload photo with library Mutler, but for now not string
     },
   },
 );

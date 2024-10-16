@@ -20,5 +20,5 @@ app.get("/", (req, res) => {
   res.json({ message: "hello world" });
 });
 // Recuperation des definitions de routes
-app.use("/", Router);
+app.use("/api", Router);
 app.listen(port, () => console.log("Le serveur a démarré au port " + port));
