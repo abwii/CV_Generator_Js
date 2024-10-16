@@ -4,9 +4,29 @@ const { verifyCV } = require('../validator/cv');
 
 module.exports = {
     findAllCV: (req, res) => {
-        CVModel.find()
+        CVModel.find({ visible: true })
+            .populate('user', 'firstname lastname email phone address')
             .then((cvs) => {
-                res.send(cvs);
+                if (cvs.length === 0) {
+                    return res.status(404).send({
+                        message: 'No visible CVs found'
+                    });
+                }
+                const formattedCVs = cvs.map(cv => ({
+                    description: cv.description,
+                    education: cv.education,
+                    experience: cv.experience,
+                    skills: cv.skills,
+                    user: {
+                        firstname: cv.user.firstname,
+                        lastname: cv.user.lastname,
+                        email: cv.user.email,
+                        phone: cv.user.phone,
+                        address: cv.user.address
+                    }
+                }));
+    
+                res.send(formattedCVs);
             })
             .catch((error) => {
                 res.status(500).send({
@@ -16,9 +36,27 @@ module.exports = {
     },
     findCVById: (req, res) => {
         const cvId = req.params.id;
-        CVModel.findById(cvId)
+        CVModel.findById({ _id: cvId, visible: true })
+        .populate('user', 'firstname lastname email phone address')
         .then((cv) => {
-            res.send(cv);
+            if (!cv) {
+                return res.status(404).send({
+                    message: 'CV not found or not visible'
+                });
+            }
+            res.send({
+                description: cv.description,
+                education: cv.education,
+                experience: cv.experience,
+                skills: cv.skills,
+                user: {
+                    firstname: cv.user.firstname,
+                    lastname: cv.user.lastname,
+                    email: cv.user.email,
+                    phone: cv.user.phone,
+                    address: cv.user.address
+                }
+            });
         })
         .catch((error) => {
             res.status(500).send({
@@ -28,6 +66,12 @@ module.exports = {
     },
     createMyCV: async (req, res) => {
         try {
+            const existingCV = await CVModel.findOne({ user: req.body.user });
+            if (existingCV) {
+                return res.status(400).send({
+                    message: 'User has already created a CV'
+                });
+            }
             verifyCV(req.body);
             const user = await UserModel.findById(req.body.user);
             if (!user) {
@@ -54,10 +98,11 @@ module.exports = {
                 visible,
                 user: {
                     id: userCV.userId,
-                    firstname: userCV.name,
-                    lastname: userCV.surname,
+                    firstname: userCV.firstname,
+                    lastname: userCV.lastname,
                     email: userCV.email,
-                    phone: userCV.phoneNumber
+                    phone: userCV.phone,
+                    address: userCV.address
                 }
             });
         } catch (error) {
@@ -101,7 +146,7 @@ module.exports = {
         CVModel.findByIdAndDelete(cvId)
             .then((cv) => {
                 res.send({
-                    message: `CV with id=${cv.id} was successfully delete`
+                    message: `CV with id=${cv.id} was successfully deleted`
                 });
             })
             .catch((error) => {

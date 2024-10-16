@@ -138,7 +138,7 @@ module.exports = {
                     default: true
                 }
             },
-            required: ['user','name', 'surname', 'description', 'skills']
+            required: ['user', 'description', 'skills']
         };
 
         let result = validator.validate(cv, cvSchema);
