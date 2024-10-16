@@ -3,13 +3,13 @@ const UserModel = require("./../models/User");
 const bcrypt = require("bcrypt");
 module.exports = {
   getUserInfos: (req, res) => {
-    const { id, prenom, nom, email, numeroTel } = req.user;
+    const { id, firstname, lastname, email, phone } = req.user;
     res.send({
       id,
-      nom,
-      prenom,
+      lastname,
+      firstname,
       email,
-      numeroTel,
+      phone,
     });
   },
   updateUser: async (req, res) => {
@@ -33,15 +33,15 @@ module.exports = {
       const updatedUserData = {};
 
       // Parcourir les champs possibles et les ajouter à updatedUserData s'ils sont présents dans req.body
-      const { nom, prenom, email, numeroTel, password, adresse, photoProfil } =
+      const { lastname, firstname, email, phone, password, adress, picture } =
         req.body;
 
-      if (nom) updatedUserData.nom = nom;
-      if (prenom) updatedUserData.prenom = prenom;
+      if (lastname) updatedUserData.lastname = lastname;
+      if (firstname) updatedUserData.firstname = firstname;
       if (email) updatedUserData.email = email;
-      if (numeroTel) updatedUserData.numeroTel = numeroTel;
-      if (adresse) updatedUserData.adresse = adresse;
-      if (photoProfil) updatedUserData.photoProfil = photoProfil;
+      if (phone) updatedUserData.phone = phone;
+      if (adress) updatedUserData.adress = adress;
+      if (picture) updatedUserData.picture = picture;
 
       // Si le mot de passe est fourni, on le hache avant la mise à jour
       if (password) {
