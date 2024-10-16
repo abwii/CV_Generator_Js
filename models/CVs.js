@@ -1,18 +1,10 @@
 const mongoose = require("mongoose");
 
-const cvSchema = new mongoose.Schema(
+const CVSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    surname: {
-      type: String,
       required: true
     },
     description: {
@@ -67,7 +59,10 @@ const cvSchema = new mongoose.Schema(
         }
       },
     ],
-    skills: [String],
+    skills: {
+      type: [String],
+      required: true
+    },
     visible: {
       type: Boolean,
       default: true
@@ -75,5 +70,6 @@ const cvSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model("CV", cvSchema);
+const CV = mongoose.model('CV', CVSchema);
 
+module.exports = CV;
