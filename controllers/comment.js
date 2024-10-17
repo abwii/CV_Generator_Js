@@ -1,35 +1,43 @@
-const validateComment = require('../validator/commentValidator');
+const validateComment = require('../validator/comment');
 const Comment = require('../models/comment');
+const { convertToCustomFormat } = require('../utils/dateConverter');
 
 exports.addComment = (req, res) => {
-  const { content, userId, cvId } = req.body;
+  const { content, user, cv } = req.body;
 
-  // Utiliser le validateur
   const errors = validateComment(content);
 
   if (errors.length > 0) {
     return res.status(400).json({ errors });
   }
 
-  // Logique pour ajouter le commentaire à la base de données
   const newComment = new Comment({
     content,
-    userId,
-    cvId,
+    user,
+    cv,
     createdAt: new Date()
   });
 
   newComment.save()
-  .then(savedComment => {
-    res.status(201).json({ message: 'Commentaire ajouté avec succès', comment: savedComment });
-  })
+    .then(savedComment => {
+      const formattedCreatedAt = convertToCustomFormat(savedComment.createdAt);  
+      const formattedUpdatedAt = convertToCustomFormat(savedComment.updatedAt);  
+
+      res.status(201).json({
+        message: 'Comment successfully added',
+        comment: {
+          ...savedComment._doc,  
+          createdAt: formattedCreatedAt,
+          updatedAt: formattedUpdatedAt
+        }
+      });
+    })
   .catch(error => {
-    console.error(error);  // Ajouter cette ligne pour afficher l'erreur dans la console
-    res.status(500).json({ error: 'Erreur lors de l\'ajout du commentaire' });
+    console.error(error); 
+    res.status(500).json({ error: 'Error adding comment' });
   });
 };
 
-// supprimer un commentaire
 exports.deleteComment = (req, res) => {
 
   console.log(req.params);
@@ -39,12 +47,41 @@ exports.deleteComment = (req, res) => {
   Comment.findByIdAndDelete(commentId)
     .then(deletedComment => {
       if (!deletedComment) {
-        return res.status(404).json({ error: 'Commentaire non trouvé' });
+        return res.status(404).json({ error: 'Comment not found' });
       }
-      res.status(200).json({ message: 'Commentaire supprimé avec succès' });
+      res.status(200).json({ message: 'Comment successfully deleted' });
     })
     .catch(error => {
       console.error(error);
-      res.status(500).json({ error: 'Erreur lors de la suppression du commentaire' });
+      res.status(500).json({ error: 'Error deleting comment' });
     });
+};
+
+exports.getAllComments = (req, res) => {
+  CommentModel.find()
+      .populate('user', 'firstname lastname')
+      .then((comments) => {
+          if (comments.length === 0) {
+              return res.status(404).send({
+                  message: 'No comments found'
+              });
+          }
+
+          const formattedComments = comments.map(comment => ({
+              content: comment.content,
+              user: {
+                  firstname: comment.user.firstname,
+                  lastname: comment.user.lastname
+              },
+              createdAt: comment.createdAt,
+              updatedAt: comment.updatedAt
+          }));
+
+          res.send(formattedComments);
+      })
+      .catch((error) => {
+          res.status(500).send({
+              message: error.message
+          });
+      });
 };

@@ -1,6 +1,8 @@
 const CVModel = require("../models/CV");
 UserModel = require('./../models/User');
 const { verifyCV } = require('../validator/cv');
+const { validateEducationDate, validateExperienceDate } = require('../validator/cvDateConverter');
+const { convertToCustomFormat } = require('../utils/dateConverter');
 
 module.exports = {
     findAllCV: (req, res) => {
@@ -72,13 +74,19 @@ module.exports = {
                     message: 'User has already created a CV'
                 });
             }
+
             verifyCV(req.body);
+
             const user = await UserModel.findById(req.body.user);
             if (!user) {
                 res.status(400).send({
                     message: 'User does not exist'
                 });
             }
+
+            validateEducationDate(req.body.education);
+            validateExperienceDate(req.body.experience);
+
             const newCV = new CVModel({
                 user,                             
                 description: req.body.description,    
@@ -87,13 +95,27 @@ module.exports = {
                 skills: req.body.skills,              
                 visible: req.body.visible
             });
-            newCV.save();
-            const { _id, description, education, experience, skills, visible, user: userCV } = newCV;
+
+            await newCV.save();
+
+            const formattedEducation = newCV.education.map(edu => ({
+                ...edu,
+                startDate: convertToCustomFormat(edu.startDate),
+                endDate: convertToCustomFormat(edu.endDate)
+            }));
+    
+            const formattedExperience = newCV.experience.map(exp => ({
+                ...exp,
+                startDate: convertToCustomFormat(exp.startDate),
+                endDate: convertToCustomFormat(exp.endDate)
+            }));
+
+            const { _id, description, skills, visible, user: userCV } = newCV;
             res.status(201).send({
                 id: _id,
                 description,
-                education,
-                experience,
+                education: formattedEducation,
+                experience: formattedExperience,
                 skills,
                 visible,
                 user: {
@@ -105,12 +127,12 @@ module.exports = {
                     address: userCV.address
                 }
             });
+
         } catch (error) {
             res.status(400).send({
                 message: error.message || 'Something Wrong'
             });
         }
-        
     },
     updateMyCV: async (req, res) => {
         const cvId = req.params.id;

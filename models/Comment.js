@@ -1,11 +1,24 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const commentSchema = new Schema({
-  cvId: { type: mongoose.Schema.Types.ObjectId, ref: 'CV', required: true }, // Associe le commentaire à un CV spécifique
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Utilisateur ayant écrit le commentaire
-  content: { type: String, required: true }, // Contenu du commentaire
-  createdAt: { type: Date, default: Date.now } // Date de création du commentaire
-});
+const commentSchema = new Schema(
+  {
+    cv: { 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'CV', 
+      required: true 
+    },
+    user: { 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true 
+    },
+    content: {
+      type: String,
+      required: true 
+    }
+  },
+  {timestamps: true }
+);
 
 module.exports = mongoose.model('Comment', commentSchema);
