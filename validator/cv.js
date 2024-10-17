@@ -29,6 +29,12 @@ module.exports = {
                 },
                 education: {
                     type: 'array',
+                    minItems: 1,
+                    maxItems: 3,
+                    errorMessage: {
+                        minItems: "Education must contain at least one item.",
+                        maxItems: "Education can contain a maximum of three items."
+                    },
                     items: {
                         type: 'object',
                         properties: {
@@ -76,6 +82,12 @@ module.exports = {
                 },
                 experience: {
                     type: 'array',
+                    minItems: 1,
+                    maxItems: 3,
+                    errorMessage: {
+                        minItems: "Experience must contain at least one item.",
+                        maxItems: "Experience can contain a maximum of three items."
+                    },
                     items: {
                         type: 'object',
                         properties: {

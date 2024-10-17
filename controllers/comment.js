@@ -58,7 +58,8 @@ exports.deleteComment = (req, res) => {
 };
 
 exports.getAllComments = (req, res) => {
-  CommentModel.find()
+  const cvId = req.params.cvId;
+  CommentModel.find({ cv: cvId })
       .populate('user', 'firstname lastname')
       .then((comments) => {
           if (comments.length === 0) {
