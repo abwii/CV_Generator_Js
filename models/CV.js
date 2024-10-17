@@ -22,11 +22,11 @@ const CVSchema = new mongoose.Schema(
           required: true
         },
         startDate: {
-          type: String,
+          type: Date,
           required: true
         },
         endDate: {
-          type: String,
+          type: Date,
           required: false
         },
         description: {
@@ -50,11 +50,11 @@ const CVSchema = new mongoose.Schema(
           required: false
         },
         startDate: {
-          type: String,
+          type: Date,
           required: true
         },
         endDate: {
-          type: String,
+          type: Date,
           required: false
         }
       },
