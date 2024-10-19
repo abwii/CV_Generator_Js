@@ -1,5 +1,5 @@
 const { areValidDates } = require('./validDate');
-const { convertToDateObject } = require('../utils/dateConverter');
+const { convertToDateObject } = require('../utils/cv');
 
 const validateEducationDate = (educationArray) => {
     educationArray.forEach(edu => {

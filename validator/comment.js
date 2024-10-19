@@ -1,14 +1,14 @@
 const { Validator } = require("jsonschema");
 
 module.exports = {
-  verifyCV: (comment) => {
+  verifyComment: (comment) => {
       if (!comment) {
           throw new Error("Comment is required");
       }
 
       let validator = new Validator();
 
-      commentSchema = {
+      let commentSchema = {
         type: 'object',
         properties: {
           cv: {

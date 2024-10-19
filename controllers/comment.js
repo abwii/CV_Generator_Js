@@ -1,21 +1,16 @@
-const validateComment = require('../validator/comment');
-const Comment = require('../models/comment');
-const { convertToCustomFormat } = require('../utils/dateConverter');
+const { verifyComment } = require('../validator/comment');
+const CommentModel = require('../models/comment');
+const { convertToCustomFormat } = require('../utils/cv');
 
-exports.addComment = (req, res) => {
+exports.addComment = async (req, res) => {
   const { content, user, cv } = req.body;
 
-  const errors = validateComment(content);
+  verifyComment(req.body);
 
-  if (errors.length > 0) {
-    return res.status(400).json({ errors });
-  }
-
-  const newComment = new Comment({
+  const newComment = new CommentModel({
     content,
     user,
-    cv,
-    createdAt: new Date()
+    cv
   });
 
   newComment.save()
@@ -40,11 +35,9 @@ exports.addComment = (req, res) => {
 
 exports.deleteComment = (req, res) => {
 
-  console.log(req.params);
+  const commentId = req.params.id;
 
-  const { commentId } = req.params;
-
-  Comment.findByIdAndDelete(commentId)
+  CommentModel.findByIdAndDelete(commentId)
     .then(deletedComment => {
       if (!deletedComment) {
         return res.status(404).json({ error: 'Comment not found' });
@@ -58,7 +51,7 @@ exports.deleteComment = (req, res) => {
 };
 
 exports.getAllComments = (req, res) => {
-  const cvId = req.params.cvId;
+  const cvId = req.params.id;
   CommentModel.find({ cv: cvId })
       .populate('user', 'firstname lastname')
       .then((comments) => {
@@ -74,8 +67,8 @@ exports.getAllComments = (req, res) => {
                   firstname: comment.user.firstname,
                   lastname: comment.user.lastname
               },
-              createdAt: comment.createdAt,
-              updatedAt: comment.updatedAt
+              createdAt: convertToCustomFormat(comment.createdAt),
+              updatedAt: convertToCustomFormat(comment.updatedAt) 
           }));
 
           res.send(formattedComments);

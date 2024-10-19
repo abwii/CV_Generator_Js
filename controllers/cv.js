@@ -1,8 +1,8 @@
 const CVModel = require("../models/CV");
-UserModel = require('./../models/User');
+const UserModel = require('./../models/User');
 const { verifyCV } = require('../validator/cv');
 const { validateEducationDate, validateExperienceDate } = require('../validator/cvDateConverter');
-const { convertToCustomFormat } = require('../utils/dateConverter');
+const { updateEducation, updateExperience, formatUpdatedCV, formatCVResponse} = require('../utils/cv');
 
 module.exports = {
     findAllCV: (req, res) => {
@@ -14,58 +14,35 @@ module.exports = {
                         message: 'No visible CVs found'
                     });
                 }
-                const formattedCVs = cvs.map(cv => ({
-                    description: cv.description,
-                    education: cv.education,
-                    experience: cv.experience,
-                    skills: cv.skills,
-                    user: {
-                        firstname: cv.user.firstname,
-                        lastname: cv.user.lastname,
-                        email: cv.user.email,
-                        phone: cv.user.phone,
-                        address: cv.user.address
-                    }
-                }));
-    
+                const formattedCVs = cvs.map(cv => formatCVResponse(cv));
                 res.send(formattedCVs);
             })
             .catch((error) => {
                 res.status(500).send({
                     message: error.message
                 });
-            })
+            });
     },
+
     findCVById: (req, res) => {
         const cvId = req.params.id;
         CVModel.findById({ _id: cvId, visible: true })
-        .populate('user', 'firstname lastname email phone address')
-        .then((cv) => {
-            if (!cv) {
-                return res.status(404).send({
-                    message: 'CV not found or not visible'
-                });
-            }
-            res.send({
-                description: cv.description,
-                education: cv.education,
-                experience: cv.experience,
-                skills: cv.skills,
-                user: {
-                    firstname: cv.user.firstname,
-                    lastname: cv.user.lastname,
-                    email: cv.user.email,
-                    phone: cv.user.phone,
-                    address: cv.user.address
+            .populate('user', 'firstname lastname email phone address')
+            .then((cv) => {
+                if (!cv) {
+                    return res.status(404).send({
+                        message: 'CV not found or not visible'
+                    });
                 }
+                res.send(formatCVResponse(cv));
+            })
+            .catch((error) => {
+                res.status(500).send({
+                    message: error.message
+                });
             });
-        })
-        .catch((error) => {
-            res.status(500).send({
-                message: error.message
-            });
-        })
     },
+
     createMyCV: async (req, res) => {
         try {
             const existingCV = await CVModel.findOne({ user: req.body.user });
@@ -79,7 +56,7 @@ module.exports = {
 
             const user = await UserModel.findById(req.body.user);
             if (!user) {
-                res.status(400).send({
+                return res.status(400).send({
                     message: 'User does not exist'
                 });
             }
@@ -88,79 +65,66 @@ module.exports = {
             validateExperienceDate(req.body.experience);
 
             const newCV = new CVModel({
-                user,                             
-                description: req.body.description,    
-                education: req.body.education,        
-                experience: req.body.experience,      
-                skills: req.body.skills,              
+                user,
+                description: req.body.description,
+                education: req.body.education,
+                experience: req.body.experience,
+                skills: req.body.skills,
                 visible: req.body.visible
             });
 
             await newCV.save();
-
-            const formattedEducation = newCV.education.map(edu => ({
-                ...edu,
-                startDate: convertToCustomFormat(edu.startDate),
-                endDate: convertToCustomFormat(edu.endDate)
-            }));
-    
-            const formattedExperience = newCV.experience.map(exp => ({
-                ...exp,
-                startDate: convertToCustomFormat(exp.startDate),
-                endDate: convertToCustomFormat(exp.endDate)
-            }));
-
-            const { _id, description, skills, visible, user: userCV } = newCV;
-            res.status(201).send({
-                id: _id,
-                description,
-                education: formattedEducation,
-                experience: formattedExperience,
-                skills,
-                visible,
-                user: {
-                    id: userCV.userId,
-                    firstname: userCV.firstname,
-                    lastname: userCV.lastname,
-                    email: userCV.email,
-                    phone: userCV.phone,
-                    address: userCV.address
-                }
-            });
+            res.status(201).send(formatCVResponse(newCV));
 
         } catch (error) {
             res.status(400).send({
-                message: error.message || 'Something Wrong'
+                message: error.message || 'Something went wrong'
             });
         }
     },
-    updateMyCV: async (req, res) => {
-        const cvId = req.params.id;
-        const cv = await CVModel.findById(cvId);
-        if (!cv) {
-            throw new Error('Cannot find CV to update');
-        }
-        const newCV = { ...cv, ...req.body };
 
-        verifyCV(newCV);
-        const { description, education, experience, skills, visible } = newCV;
-        CVModel.findByIdAndUpdate(
-            cvId,
-            {
-                description,
-                education,
-                experience,
-                skills,
-                visible
-            },
-            { new: true }
-        )
-            .then((updateMyCV) => {
-                res.send(updateMyCV);
-            })
-            .catch((error) => {
-                res.status(500).send(error.message || `Cannot update CV with id=${cvId}`);
-            });
+    updateMyCV: async (req, res) => {
+        try {
+            const cvId = req.params.id;
+            const existingCV = await CVModel.findById(cvId);
+
+            if (!existingCV) {
+                return res.status(404).send('Cannot find CV to update');
+            }
+
+            const newCV = { ...req.body };
+            const updateFields = {};
+
+            if (newCV.description && newCV.description !== existingCV.description) {
+                updateFields.description = newCV.description;
+            }
+            if (newCV.skills && JSON.stringify(newCV.skills) !== JSON.stringify(existingCV.skills)) {
+                updateFields.skills = newCV.skills;
+            }
+            if (newCV.visible !== undefined && newCV.visible !== existingCV.visible) {
+                updateFields.visible = newCV.visible;
+            }
+
+            if (newCV.education) {
+                existingCV.education = updateEducation(existingCV.education, newCV.education);
+                updateFields.education = existingCV.education;
+            }
+
+            if (newCV.experience) {
+                existingCV.experience = updateExperience(existingCV.experience, newCV.experience);
+                updateFields.experience = existingCV.experience;
+            }
+
+            const updatedCV = await CVModel.findByIdAndUpdate(cvId, { $set: updateFields }, { new: true });
+
+            if (!updatedCV) {
+                return res.status(404).send(`Cannot update CV with id=${cvId}`);
+            }
+
+            res.status(200).send(formatUpdatedCV(updatedCV));
+        } catch (error) {
+            res.status(500).send(error.message || `Cannot update CV with id=${cvId}`);
+        }
     },
 
     deleteMyCV: (req, res) => {

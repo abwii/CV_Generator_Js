@@ -56,7 +56,7 @@ module.exports = {
                             },
                             startDate: {
                                 type: 'string',
-                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$', // bonus : pas dans l'avenir
+                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$',
                                 errorMessage: {
                                     type: "Start date must be a string",
                                     pattern: "Start date must be in the format DD-MM-YYYY"
@@ -115,7 +115,7 @@ module.exports = {
                             },
                             startDate: {
                                 type: 'string',
-                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$', // bonus : pas dans l'avenir
+                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$',
                                 errorMessage: {
                                     type: "Start date must be a string",
                                     pattern: "Start date must be in the format DD-MM-YYYY"
@@ -123,14 +123,14 @@ module.exports = {
                             },
                             endDate: {
                                 type: 'string',
-                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$', // bonus : pas dans l'avenir
+                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$',
                                 errorMessage: {
                                     type: "End date must be a string",
                                     pattern: "End date must be in the format DD-MM-YYYY"
                                 }
                             }
                         },
-                        required: ['title', 'company', 'startDate', 'endDate']
+                        required: ['title', 'company', 'startDate']
                     }
                 },
                 skills: {
