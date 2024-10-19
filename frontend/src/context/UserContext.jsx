@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 export const UserContext = createContext(null);
@@ -6,7 +7,7 @@ export const UserContext = createContext(null);
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-
+  const navigate = useNavigate();
   // Fonction pour connecter un utilisateur avec des informations et un token
   const login = (logInfos) => {
     const userData = { ...logInfos };
@@ -21,7 +22,8 @@ const UserProvider = ({ children }) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('user');  // Supprime l'utilisateur du localStorage
-    localStorage.removeItem('token');  // Supprime le token du localStorage
+    localStorage.removeItem('token');
+    navigate('/home'); // Supprime le token du localStorage
   };
 
   // Récupère les informations de l'utilisateur depuis l'état ou le localStorage

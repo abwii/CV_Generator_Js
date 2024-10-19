@@ -22,6 +22,7 @@ function Header() {
             <div className="rounded-full h-16 w-16 flex items-center justify-center bg-[#D9D9D9]">
               {logoText} {/* Afficher les initiales si l'utilisateur est connecté */}
             </div>
+            <p className="m-3">{user.firstname}{" "}{user.lastname}</p>
           </div>
         )}
 

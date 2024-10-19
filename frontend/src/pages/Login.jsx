@@ -14,7 +14,7 @@ function Login() {
         {/* Bouton Retour */}
         <div className="flex justify-start mb-8">
           <Link
-            to={"/home"}
+            to={"/mcv"}
             className="font-imbue flex items-center text-[#394A2E] text-lg border border-[#394A2E] rounded-full px-4 py-1 hover:bg-[#394A2E] hover:text-white transition"
           >
             <span className="mr-2 ">←</span> Back
@@ -46,7 +46,7 @@ function Login() {
               if (response.ok) {
                 const data = await response.json();
                 login(data.user); // Assure-toi que l'API retourne un objet avec les infos de l'utilisateur et le token
-                navigate('/home', { replace: true });
+                navigate('/mycv', { replace: true });
               } else {
                 // Gérer les erreurs
                 console.error("Erreur lors de la connexion", await response.json());
