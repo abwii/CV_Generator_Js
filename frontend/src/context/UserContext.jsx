@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { createContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 export const UserContext = createContext(null);
 
@@ -7,63 +7,57 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
-  // Login function
-  const login = (logInfos, token) => {
-    const userWithToken = { ...logInfos, name: "Toto", token };
-    setUser(userWithToken);
-    setToken(token);
-    localStorage.setItem("user", JSON.stringify(userWithToken));
+  // Fonction pour connecter un utilisateur avec des informations et un token
+  const login = (logInfos) => {
+    const userData = { ...logInfos };
+    setUser(userData);
+    /* setToken(userToken); */
+    localStorage.setItem('user', JSON.stringify(userData));  // Stocke l'utilisateur
+    // localStorage.setItem('token', userToken);  // Stocke le token
   };
 
-  // Logout function
+  // Fonction pour déconnecter un utilisateur
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("user");
+    localStorage.removeItem('user');  // Supprime l'utilisateur du localStorage
+    localStorage.removeItem('token');  // Supprime le token du localStorage
   };
 
-  // Check if token is stored and still valid
+  // Récupère les informations de l'utilisateur depuis l'état ou le localStorage
   const getUserInfos = () => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      setToken(parsedUser.token);
-      return parsedUser;
+    if (user) {
+      return user;
+    } else {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        return JSON.parse(storedUser);
+      }
     }
-    return null;
   };
 
-  // Interceptor to check token expiration for each request
-  const fetchWithAuth = async (url, options = {}) => {
-    const headers = {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-    };
-
-    const response = await fetch(url, {
-      ...options,
-      headers,
-    });
-
-    if (response.status === 401) {
-      // Token expired or unauthorized
-      logout();
-      alert("Session expired, please log in again.");
-    }
-
-    return response;
-  };
-
-  // Automatically fetch user info on component mount
+  // Vérifie au montage si un token est stocké dans le localStorage
   useEffect(() => {
-    getUserInfos();
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);  // Réactive le token depuis le localStorage au chargement
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));  // Récupère les infos de l'utilisateur depuis le stockage
+      }
+    }
   }, []);
 
+  // Déconnexion automatique si le token devient null
+  useEffect(() => {
+    if (!token) {
+      logout();
+    }
+  }, [token]);
+
   return (
-    <UserContext.Provider
-      value={{ login, getUserInfos, logout, fetchWithAuth }}
-    >
+    <UserContext.Provider value={{ login, getUserInfos, logout, token }}>
       {children}
     </UserContext.Provider>
   );

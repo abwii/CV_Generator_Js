@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from '../context/UserContext'; // Assure-toi que le chemin est correct
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false); // Gérer l'état du menu
+  const { getUserInfos, logout } = useContext(UserContext); // Récupérer les infos de l'utilisateur et la fonction de déconnexion
 
   const toggleMenu = () => {
     setIsOpen(!isOpen); // Alterner l'état du menu
   };
 
+  const user = getUserInfos(); // Récupérer les infos de l'utilisateur
+  const logoText = user ? `${user.firstname.charAt(0)}${user.lastname.charAt(0)}` : ''; // Obtenir les initiales
+
   return (
     <>
-      <nav className="flex items-center justify-between flex-wrap bg-[#162C04] p-6">
+      <nav className="font-imbue font-light text-xl text-white flex items-center justify-between flex-wrap bg-[#162C04] p-3">
         {/* Logo à gauche */}
-        <div className="flex items-center flex-shrink-0 text-white mr-6">
-          <div className="rounded-full h-16 w-16 flex items-center justify-center bg-[#D9D9D9]">
-            Logo
+        {user && ( // Affiche le logo seulement si l'utilisateur est connecté
+          <div className="flex items-center flex-shrink-0 text-white mr-6">
+            <div className="rounded-full h-16 w-16 flex items-center justify-center bg-[#D9D9D9]">
+              {logoText} {/* Afficher les initiales si l'utilisateur est connecté */}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Bouton Menu pour mobile */}
         <div className="block lg:hidden">
@@ -41,25 +48,41 @@ function Header() {
             isOpen ? "block" : "hidden"
           } w-full block flex-grow lg:flex lg:items-center lg:w-auto justify-end`}
         >
-          <ul className="flex flex-col lg:flex-row lg:space-x-6 text-white">
-            <li className="">
-              <Link to={"/mycv"} className="text-white hover:text-gray-300 ">
-                My CV
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={"/myaccount"}
-                className="text-white hover:text-gray-300 lg:m-3"
-              >
-                My Account
-              </Link>
-            </li>
-            <li>
-              <Link to={"/allcvs"} className="text-white hover:text-gray-300">
+          <ul className="flex flex-col lg:flex-row lg:space-x-6 ">
+          <li className="p-3">
+              <Link to={"/allcvs"} className="hover:text-gray-300">
                 All CVs
               </Link>
             </li>
+            {!user && ( // Affiche le lien Home seulement si l'utilisateur n'est pas connecté
+              <li className="p-3">
+                <Link to={"/home"} className="hover:text-gray-300">
+                  Home
+                </Link>
+              </li>
+            )}
+            {user && ( // Affiche les liens My CV et My Account seulement si l'utilisateur est connecté
+              <>
+                <li className="p-3">
+                  <Link to={"/mycv"} className="hover:text-gray-300">
+                    My CV
+                  </Link>
+                </li>
+                <li className="p-3">
+                  <Link to={"/myaccount"} className="hover:text-gray-300">
+                    My Account
+                  </Link>
+                </li>
+                <li className="p-3">
+                <button
+                  onClick={logout} // Appelle la fonction de déconnexion
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                  Déconnexion
+                </button>
+              </li>
+              </>
+            )}
           </ul>
         </div>
       </nav>
