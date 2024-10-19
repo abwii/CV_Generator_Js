@@ -1,8 +1,9 @@
 const CVModel = require("../models/CV");
 const UserModel = require('./../models/User');
 const { verifyCV } = require('../validator/cv');
+const { areValidDates } = require('../validator/validDate')
 const { validateEducationDate, validateExperienceDate } = require('../validator/cvDateConverter');
-const { updateEducation, updateExperience, formatUpdatedCV, formatCVResponse} = require('../utils/cv');
+const { formatUpdatedCV, formatCVResponse} = require('../utils/cv');
 
 module.exports = {
     findAllCV: (req, res) => {
@@ -106,14 +107,77 @@ module.exports = {
             }
 
             if (newCV.education) {
-                existingCV.education = updateEducation(existingCV.education, newCV.education);
-                updateFields.education = existingCV.education;
-            }
+                existingCV.education = existingCV.education.filter(existingEdu =>
+                    newCV.education.some(newEdu => newEdu._id && newEdu._id.equals(existingEdu._id))
+                );
+            
+                newCV.education.forEach(newEdu => {
+                    const existingEdu = existingCV.education.find(existingEdu => existingEdu._id && existingEdu._id.equals(newEdu._id));
+            
+                    if (existingEdu) {
+                        const startDateToCheck = newEdu.startDate ? newEdu.startDate : existingEdu.startDate;
+                        const endDateToCheck = newEdu.endDate ? newEdu.endDate : existingEdu.endDate;
+            
+                        if (startDateToCheck && endDateToCheck) {
+                            if (!areValidDates(startDateToCheck, endDateToCheck)) {
+                                throw new Error('End date must be after start date');
+                            }
+                        }
+            
+                        existingEdu.degree = newEdu.degree !== undefined ? newEdu.degree : existingEdu.degree;
+                        existingEdu.institution = newEdu.institution !== undefined ? newEdu.institution : existingEdu.institution;
+                        existingEdu.startDate = convertToDateObject(newEdu.startDate);
+                        existingEdu.endDate = convertToDateObject(newEdu.endDate);
+                        existingEdu.description = newEdu.description !== undefined ? newEdu.description : existingEdu.description;
+                    } else {
+                        existingCV.education.push({
+                            degree: newEdu.degree,
+                            institution: newEdu.institution,
+                            startDate: convertToDateObject(newEdu.startDate),
+                            endDate: convertToDateObject(newEdu.endDate),
+                            description: newEdu.description,
+                        });
+                    }
+                });
+            
+                return existingCV.education;
+            }            
 
             if (newCV.experience) {
-                existingCV.experience = updateExperience(existingCV.experience, newCV.experience);
-                updateFields.experience = existingCV.experience;
-            }
+                existingCV.experience = existingCV.experience.filter(existingExp =>
+                    newCV.experience.some(newExp => newExp._id && newExp._id.equals(existingExp._id))
+                );
+            
+                newExperience.forEach(newExp => {
+                    const existingExp = existingExperience.find(existingExp => existingExp._id && existingExp._id.equals(newExp._id));
+            
+                    if (existingExp) {
+                        const startDateToCheck = newExp.startDate ? newExp.startDate : existingExp.startDate;
+                        const endDateToCheck = newExp.endDate ? newExp.endDate : existingExp.endDate;
+            
+                        if (startDateToCheck && endDateToCheck) {
+                            if (!areValidDates(startDateToCheck, endDateToCheck)) {
+                                throw new Error('End date must be after start date');
+                            }
+                        }
+                        existingExp.title = newExp.title !== undefined ? newExp.title : existingExp.title;
+                        existingExp.company = newExp.company !== undefined ? newExp.company : existingExp.company;
+                        existingExp.startDate = convertToDateObject(newExp.startDate);
+                        existingExp.endDate = convertToDateObject(newExp.endDate);
+                        existingExp.description = newExp.description !== undefined ? newExp.description : existingExp.description;
+                    } else {
+                        existingExperience.push({
+                            title: newExp.title,
+                            company: newExp.company,
+                            startDate: convertToDateObject(newExp.startDate),
+                            endDate: convertToDateObject(newExp.endDate),
+                            description: newExp.description,
+                        });
+                    }
+                });
+            
+                return existingExperience;
+            };            
 
             const updatedCV = await CVModel.findByIdAndUpdate(cvId, { $set: updateFields }, { new: true });
 

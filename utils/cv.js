@@ -1,5 +1,4 @@
 const moment = require('moment');
-const { areValidDates } = require('../validator/validDate');
 
 const convertToDateObject = (dateString) => {
     return moment(dateString, 'DD/MM/YYYY').toDate();
@@ -7,76 +6,6 @@ const convertToDateObject = (dateString) => {
 
 const convertToCustomFormat = (dateObject) => {
     return moment(dateObject).format('DD/MM/YYYY');
-};
-
-const updateEducation = (existingEducation, newEducation) => {
-    existingEducation = existingEducation.filter(existingEdu =>
-        newEducation.some(newEdu =>
-            newEdu.degree === existingEdu.degree && newEdu.institution === existingEdu.institution
-        )
-    );
-
-    newEducation.forEach(newEdu => {
-        const existingEdu = existingEducation.find(existingEdu =>
-            existingEdu.degree === newEdu.degree && existingEdu.institution === newEdu.institution
-        );
-        if (existingEdu) {
-            if (newEdu.startDate && newEdu.endDate) {
-                if (!areValidDates(newEdu.startDate, newEdu.endDate)) {
-                    throw new Error('Invalid date range for education');
-                }
-            }
-            existingEdu.startDate = convertToDateObject(newEdu.startDate);
-            existingEdu.endDate = convertToDateObject(newEdu.endDate);
-            existingEdu.description = newEdu.description;
-        } else {
-            existingEducation.push({
-                degree: newEdu.degree,
-                institution: newEdu.institution,
-                startDate: convertToDateObject(newEdu.startDate),
-                endDate: convertToDateObject(newEdu.endDate),
-                description: newEdu.description,
-            });
-        }
-    });
-
-    return existingEducation;
-};
-
-const updateExperience = (existingExperience, newExperience) => {
-    existingExperience = existingExperience.filter(existingExp =>
-        newExperience.some(newExp => newExp._id && newExp._id.equals(existingExp._id))
-    );
-
-    newExperience.forEach(newExp => {
-        const existingExp = existingExperience.find(existingExp => existingExp._id && existingExp._id.equals(newExp._id));
-
-        if (existingExp) {
-            const startDateToCheck = newExp.startDate ? newExp.startDate : existingExp.startDate;
-            const endDateToCheck = newExp.endDate ? newExp.endDate : existingExp.endDate;
-
-            if (startDateToCheck && endDateToCheck) {
-                if (!areValidDates(startDateToCheck, endDateToCheck)) {
-                    throw new Error('End date must be after start date');
-                }
-            }
-            existingExp.title = newExp.title !== undefined ? newExp.title : existingExp.title;
-            existingExp.company = newExp.company !== undefined ? newExp.company : existingExp.company;
-            existingExp.startDate = convertToDateObject(newExp.startDate);
-            existingExp.endDate = convertToDateObject(newExp.endDate);
-            existingExp.description = newExp.description !== undefined ? newExp.description : existingExp.description;
-        } else {
-            existingExperience.push({
-                title: newExp.title,
-                company: newExp.company,
-                startDate: convertToDateObject(newExp.startDate),
-                endDate: convertToDateObject(newExp.endDate),
-                description: newExp.description,
-            });
-        }
-    });
-
-    return existingExperience;
 };
 
 const formatUpdatedCV = (updatedCV) => {
@@ -147,8 +76,6 @@ const formatCVResponse = (cv) => {
 module.exports = {
     convertToDateObject,
     convertToCustomFormat,
-    updateEducation,
-    updateExperience,
     formatUpdatedCV,
     formatEducation,
     formatExperience,
