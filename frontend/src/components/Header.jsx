@@ -1,16 +1,22 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from '../context/UserContext'; // Assure-toi que le chemin est correct
+import { UserContext } from '../context/UserContext';
 
 function Header() {
-  const [isOpen, setIsOpen] = useState(false); // Gérer l'état du menu
-  const { getUserInfos, logout } = useContext(UserContext); // Récupérer les infos de l'utilisateur et la fonction de déconnexion
+  const [user, setUser] = useState(null);
+  const { getUserInfos, logout } = useContext(UserContext);
 
+  useEffect(() => {
+    const userInfo = getUserInfos();
+    setUser(userInfo);
+  }, [getUserInfos]); // Dépendance pour réexécuter l'effet si getUserInfos change
+
+  const [isOpen, setIsOpen] = useState(false); 
   const toggleMenu = () => {
     setIsOpen(!isOpen); // Alterner l'état du menu
   };
 
-  const user = getUserInfos(); // Récupérer les infos de l'utilisateur
+ // Récupérer les infos de l'utilisateur
   const logoText = user ? `${user.firstname.charAt(0)}${user.lastname.charAt(0)}` : ''; // Obtenir les initiales
 
   return (
@@ -77,7 +83,7 @@ function Header() {
                 <li className="p-3">
                 <button
                   onClick={logout} // Appelle la fonction de déconnexion
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  className="bg-red-500 text-white px-2  rounded hover:bg-red-600"
                 >
                   Déconnexion
                 </button>
