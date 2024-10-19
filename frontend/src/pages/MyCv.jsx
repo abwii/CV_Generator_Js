@@ -1,6 +1,6 @@
 import React from "react";
 
-function Mycv() {
+function MyCv() {
   return (
     <>
       <div className="flex items-center justify-center h-screen bg-white">
@@ -10,4 +10,4 @@ function Mycv() {
   );
 }
 
-export default Mycv;
+export default MyCv;

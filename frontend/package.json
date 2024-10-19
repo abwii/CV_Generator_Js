@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@yaireo/tagify": "^4.31.3",
     "formik": "^2.4.6",
     "frontend": "file:",
     "react": "^18.3.1",
