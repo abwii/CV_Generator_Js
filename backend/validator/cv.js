@@ -19,6 +19,14 @@ module.exports = {
                         pattern: "User must be a valid MongoDB ObjectId format"
                     }
                 },
+                title: {
+                    type: 'string',
+                    minLength: 2,
+                    errorMessage: {
+                        type: "Title must be a string",
+                        minLength: "Title cannot be empty"
+                    }
+                },
                 description: {
                     type: 'string',
                     minLength: 3,
@@ -29,6 +37,12 @@ module.exports = {
                 },
                 education: {
                     type: 'array',
+                    minItems: 1,
+                    maxItems: 3,
+                    errorMessage: {
+                        minItems: "Education must contain at least one item.",
+                        maxItems: "Education can contain a maximum of three items."
+                    },
                     items: {
                         type: 'object',
                         properties: {
@@ -50,7 +64,7 @@ module.exports = {
                             },
                             startDate: {
                                 type: 'string',
-                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$', // bonus : pas dans l'avenir
+                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$',
                                 errorMessage: {
                                     type: "Start date must be a string",
                                     pattern: "Start date must be in the format DD-MM-YYYY"
@@ -76,6 +90,12 @@ module.exports = {
                 },
                 experience: {
                     type: 'array',
+                    minItems: 1,
+                    maxItems: 3,
+                    errorMessage: {
+                        minItems: "Experience must contain at least one item.",
+                        maxItems: "Experience can contain a maximum of three items."
+                    },
                     items: {
                         type: 'object',
                         properties: {
@@ -103,7 +123,7 @@ module.exports = {
                             },
                             startDate: {
                                 type: 'string',
-                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$', // bonus : pas dans l'avenir
+                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$',
                                 errorMessage: {
                                     type: "Start date must be a string",
                                     pattern: "Start date must be in the format DD-MM-YYYY"
@@ -111,17 +131,41 @@ module.exports = {
                             },
                             endDate: {
                                 type: 'string',
-                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$', // bonus : pas dans l'avenir
+                                pattern: '^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d$',
                                 errorMessage: {
                                     type: "End date must be a string",
                                     pattern: "End date must be in the format DD-MM-YYYY"
                                 }
                             }
                         },
-                        required: ['title', 'company', 'startDate', 'endDate']
+                        required: ['title', 'company', 'startDate']
                     }
                 },
                 skills: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        errorMessage: {
+                            type: "Each skill must be a string"
+                        }
+                    },
+                    errorMessage: {
+                        type: "Skills must be an array of strings"
+                    }
+                },
+                softSkills: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        errorMessage: {
+                            type: "Each skill must be a string"
+                        }
+                    },
+                    errorMessage: {
+                        type: "Skills must be an array of strings"
+                    }
+                },
+                languages: {
                     type: 'array',
                     items: {
                         type: 'string',
@@ -138,7 +182,7 @@ module.exports = {
                     default: true
                 }
             },
-            required: ['user', 'description', 'skills']
+            required: ['user', 'title', 'description', 'skills', 'softSkills', 'languages']
         };
 
         let result = validator.validate(cv, cvSchema);

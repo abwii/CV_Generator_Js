@@ -7,6 +7,10 @@ const CVSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
+    title: {
+      type: String,
+      required: true
+    },
     description: {
       type: String,
       required: true
@@ -60,6 +64,14 @@ const CVSchema = new mongoose.Schema(
       },
     ],
     skills: {
+      type: [String],
+      required: true
+    },
+    softSkills: {
+      type: [String],
+      required: true
+    },
+    languages: {
       type: [String],
       required: true
     },
