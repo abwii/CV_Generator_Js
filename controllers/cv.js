@@ -3,7 +3,7 @@ const UserModel = require('./../models/User');
 const { verifyCV } = require('../validator/cv');
 const { areValidDates } = require('../validator/validDate')
 const { validateEducationDate, validateExperienceDate } = require('../validator/cvDateConverter');
-const { formatUpdatedCV, formatCVResponse} = require('../utils/cv');
+const { convertToDateObject, formatUpdatedCV, formatCVResponse} = require('../utils/cv');
 
 module.exports = {
     findAllCV: (req, res) => {
