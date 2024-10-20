@@ -1,4 +1,3 @@
-import React from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -12,7 +11,7 @@ function Register() {
         {/* Bouton Retour */}
         <div className="flex justify-start mb-8">
           <Link
-            to={"/home"}
+            to={"/"}
             className="font-imbue flex items-center text-[#394A2E] text-lg border border-[#394A2E] rounded-full px-4 py-1 hover:bg-[#394A2E] hover:text-white transition"
           >
             <span className="mr-2 ">←</span> Back

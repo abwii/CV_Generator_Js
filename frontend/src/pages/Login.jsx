@@ -14,7 +14,7 @@ function Login() {
         {/* Bouton Retour */}
         <div className="flex justify-start mb-8">
           <Link
-            to={"/mcv"}
+            to={"/"}
             className="font-imbue flex items-center text-[#394A2E] text-lg border border-[#394A2E] rounded-full px-4 py-1 hover:bg-[#394A2E] hover:text-white transition"
           >
             <span className="mr-2 ">←</span> Back

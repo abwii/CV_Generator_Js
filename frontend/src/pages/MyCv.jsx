@@ -1,7 +1,9 @@
-import React, { useContext,  } from "react";
+import { useContext,  } from "react";
 import { UserContext } from '../context/UserContext.jsx';
 
 function Mycv() {
+  const { getUserInfos} = useContext(UserContext);
+
   return (
     <div className="bg-gray-100 min-h-screen p-6 flex items-center justify-center ">
       <div className="flex flex-col lg:flex-row items-center justify-center mt-5 w-full max-w-5xl">
@@ -41,7 +43,7 @@ function Mycv() {
           {/* Summary Section */}
           <h1 className="text-gray-600">
             Développeuse Fullstack
-            Miro Future étudiante en Mastère Dev Manager Full Stack à l'Efrei, je suis à la recherche d'une alternance
+            Miro Future étudiante en Mastère Dev Manager Full Stack à  Efrei, je suis à la recherche d une alternance
             de 24 mois à partir de Septembre pour enrichir mes compétences et débuter ma carrière professionnelle avec
             passion et détermination. 1 semaine de cours / 2 semaines en entreprise
           </h1>
@@ -52,7 +54,7 @@ function Mycv() {
             <li className="text-gray-600 font-semibold">
               Sept - Déc 2023 | Stage - bynativ
               <p>
-                Développement d'une application mobile en utilisant Vue.js et Docker. Configuration et orchestration des
+                Développement d une application mobile en utilisant Vue.js et Docker. Configuration et orchestration des
                 ressources AWS avec Terraform et Terragrunt.
               </p>
             </li>
@@ -61,7 +63,7 @@ function Mycv() {
             <li className="text-gray-600 font-semibold">
               Sept - Déc 2023 | Stage - bynativ
               <p>
-                Développement d'une application mobile en utilisant Vue.js et Docker. Configuration et orchestration des
+                Développement d une application mobile en utilisant Vue.js et Docker. Configuration et orchestration des
                 ressources AWS avec Terraform et Terragrunt.
               </p>
             </li>
@@ -70,7 +72,7 @@ function Mycv() {
             <li className="text-gray-600 font-semibold">
               Sept - Déc 2023 | Stage - bynativ
               <p>
-                Développement d'une application mobile en utilisant Vue.js et Docker. Configuration et orchestration des
+                Développement d une application mobile en utilisant Vue.js et Docker. Configuration et orchestration des
                 ressources AWS avec Terraform et Terragrunt.
               </p>
             </li>
@@ -81,15 +83,15 @@ function Mycv() {
           <ul className="list-disc ml-5 text-white">
             <li className="text-gray-600 font-semibold">
               2024 - 2026 | Mastère Dev Manager Full Stack - EFREI
-              <p>Formation en alternance à l'EFREI, spécialisation en développement full stack.</p>
+              <p>Formation en alternance à  EFREI, spécialisation en développement full stack.</p>
             </li>
             <li className="text-gray-600 font-semibold">
               2024 - 2026 | Mastère Dev Manager Full Stack - EFREI
-              <p>Formation en alternance à l'EFREI, spécialisation en développement full stack.</p>
+              <p>Formation en alternance à  EFREI, spécialisation en développement full stack.</p>
             </li>
             <li className="text-gray-600 font-semibold">
               2024 - 2026 | Mastère Dev Manager Full Stack - EFREI
-              <p>Formation en alternance à l'EFREI, spécialisation en développement full stack.</p>
+              <p>Formation en alternance à  EFREI, spécialisation en développement full stack.</p>
             </li>
           </ul>
         </div>
@@ -98,4 +100,4 @@ function Mycv() {
   );
 }
 
-export default MyCv;
+export default Mycv;

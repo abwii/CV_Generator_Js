@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import  { useState, useContext } from "react";
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -52,7 +52,7 @@ function MyAccount() {
         {/* Bouton Retour */}
         <div className="flex justify-start mb-8">
           <Link
-            to={"/home"}
+            to={"/"}
             className="font-imbue flex items-center text-[#394A2E] text-lg border border-[#394A2E] rounded-full px-4 py-1 hover:bg-[#394A2E] hover:text-white transition"
           >
             <span className="mr-2 ">←</span> Back
@@ -98,7 +98,7 @@ function MyAccount() {
               // Si la requête est réussie, rediriger vers la page d'accueil
               if (response.ok) {
                 updateUser(data);
-                navigate('/home');
+                navigate('/');
               } else {
                 // Gérer les erreurs
                 console.error("Erreur lors de la mise à jour", data);
