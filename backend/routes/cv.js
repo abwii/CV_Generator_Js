@@ -8,5 +8,5 @@ router.get("/all/:id", cvController.findCVById); //api/cv/all/:id
 router.post("/create", verifyUser, cvController.createMyCV); // ou : me/cv/create
 router.put("/update/:id", verifyUser, cvController.updateMyCV); // ou : me/cv/update/id, avec sans id ?
 router.delete("/delete/:id", verifyUser, cvController.deleteMyCV); // ou : me/cv/delete/id, avec sans id ?
-
+router.get("/:id", cvController.findCVByUserId);
 module.exports = router;

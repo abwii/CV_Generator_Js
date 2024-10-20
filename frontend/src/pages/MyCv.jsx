@@ -1,11 +1,32 @@
-import { useContext,  } from "react";
+import  { useState, useContext,useEffect } from "react";
 import { UserContext } from '../context/UserContext.jsx';
-
+import { Link, useNavigate } from 'react-router-dom';
 function Mycv() {
-  const { getUserInfos} = useContext(UserContext);
+  const { getUserInfos } = useContext(UserContext);
+  const userId = getUserInfos().id;
 
+ const [myCv,setMyCv] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`http://localhost:5001/api/cv/${userId}`);
+      const data = await response.json();
+      console.log(data)
+      setMyCv(data); // Mets à jour l'état avec la liste des CV
+    };
+
+    fetchData();
+  }, []);
+ 
+  
   return (
-    <div className="bg-gray-100 min-h-screen p-6 flex items-center justify-center ">
+
+    <>
+
+
+    
+
+     <div className="bg-gray-100 min-h-screen p-6 flex items-center justify-center ">
+     
       <div className="flex flex-col lg:flex-row items-center justify-center mt-5 w-full max-w-5xl">
         {/* Left Side (Contact, Education, Skills) */}
         <div className="bg-[#364435] w-full lg:w-1/4 p-10 h-auto lg:h-[600px] my-5">
@@ -21,9 +42,9 @@ function Mycv() {
           {/* Contact Section */}
           <h1 className="text-white uppercase tracking-widest text-lg font-bold">Contact</h1>
           <hr className="my-5" />
-          <h1 className=" text-white">loremipsum@gmail.com</h1>
-          <h1 className="text-white text-sm">07 68 41 65 85</h1>
-          <h1 className="text-white text-sm">Paris 4e</h1>
+          <h1 className=" text-white">{getUserInfos().email}</h1>
+          <h1 className="text-white text-sm">{getUserInfos().phone}</h1>
+          <h1 className="text-white text-sm">{getUserInfos().address}</h1>
 
           {/* Skills Section */}
           <h1 className="text-white mt-2 uppercase tracking-widest text-lg font-bold">Skills</h1>
@@ -38,14 +59,11 @@ function Mycv() {
 
         {/* Right Side (Summary, Experience) */}
         <div className="bg-white w-full lg:w-3/4 p-10 h-[auto]">
-          <h1 className="text-5xl mb-3">{getUserInfos().firstname}{" "}{getUserInfos().lastname}</h1>
+          <h1 className="text-5xl mb-3">{myCv.title}</h1>
 
           {/* Summary Section */}
           <h1 className="text-gray-600">
-            Développeuse Fullstack
-            Miro Future étudiante en Mastère Dev Manager Full Stack à  Efrei, je suis à la recherche d une alternance
-            de 24 mois à partir de Septembre pour enrichir mes compétences et débuter ma carrière professionnelle avec
-            passion et détermination. 1 semaine de cours / 2 semaines en entreprise
+         
           </h1>
 
           {/* Experience Section */}
@@ -96,7 +114,16 @@ function Mycv() {
           </ul>
         </div>
       </div>
+      <div className="item-ends">
+        <Link  to={"/updatecv"} className="flex p-2.5 bg-yellow-500 rounded-xl hover:rounded-3xl hover:bg-yellow-600 transition-all duration-300 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        </Link> 
     </div>
+    </div>
+    </>   
+
   );
 }
 

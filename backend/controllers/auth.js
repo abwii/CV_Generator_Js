@@ -7,8 +7,7 @@ module.exports = {
   register: async (req, res) => {
     try {
       verifyUser(req.body);
-      const { firstname, lastname, email, phone, password, address } =
-        req.body;
+      const { firstname, lastname, email, phone, password, address } = req.body;
 
       const hash = await bcrypt.hash(password, 10);
 
@@ -18,7 +17,7 @@ module.exports = {
         email,
         phone,
         password: hash,
-        address
+        address,
       });
 
       await newUser.save();
@@ -29,7 +28,7 @@ module.exports = {
         lastname: newUser.lastname,
         email: newUser.email,
         phone: newUser.phone,
-        address: newUser.address
+        address: newUser.address,
       });
     } catch (error) {
       res.send({
@@ -72,6 +71,9 @@ module.exports = {
           id: user._id,
           firstname: user.firstname,
           lastname: user.lastname,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
           token,
         },
       });

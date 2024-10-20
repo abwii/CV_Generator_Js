@@ -9,6 +9,7 @@ import MyCv from "./pages/MyCv";
 import AllCvs from "./pages/AllCvs";
 import GenerateCV from "./pages/GenerateCV";
 import { UserContext } from './context/UserContext';
+import UpdateCv from "./pages/UpdateCv";
 
 function App() {
   const { getUserInfos } = useContext(UserContext);
@@ -33,6 +34,7 @@ function App() {
         <Route path="/mycv" element={<MyCv />} />
         <Route path="/allcvs" element={<AllCvs />} />
         <Route path="/generatemycv" element={<GenerateCV />} />
+        <Route path="/updatecv" element={<UpdateCv/>}/>
       </Routes>
     </>
   );

@@ -6,7 +6,7 @@ export const UserContext = createContext(null);
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [cv, setCv] = useState(null);
+  const [cvs, setCvs] = useState(null);
   const navigate = useNavigate();
 
  
@@ -16,13 +16,7 @@ const UserProvider = ({ children }) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));  // Stocke l'utilisateur
   };
-  // Fonction pour connecter un utilisateur avec des informations
-    const createCV = (logInfos) => {
-    const cvData = { ...logInfos };
-    setCv(cvData)
-    localStorage.setItem('cv', JSON.stringify(cvData));  // Stocke l'utilisateur
-  };
-
+ 
   // Fonction pour déconnecter un utilisateur
   const logout = () => {
     setUser(null);
@@ -51,15 +45,16 @@ const UserProvider = ({ children }) => {
     }
   }, []); // Exécute une fois au montage
 
+
   // Fonction de mise à jour des informations utilisateur
   const updateUser = (updatedUser) => {
     const newUser = { ...user, ...updatedUser };
     setUser(newUser);
     localStorage.setItem('user', JSON.stringify(newUser));
   }; 
-
+  console.log(getUserInfos)
   return (
-    <UserContext.Provider value={{ user, login, logout, updateUser,getUserInfos,getCvInfos,createCV }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser,getUserInfos,getCvInfos, }}>
       {children}
     </UserContext.Provider>
   );
