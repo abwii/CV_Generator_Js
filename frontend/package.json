@@ -13,7 +13,9 @@
     "@yaireo/tagify": "^4.31.3",
     "formik": "^2.4.6",
     "frontend": "file:",
+    "moment": "^2.30.1",
     "react": "^18.3.1",
+    "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "yup": "^1.4.0"
