@@ -1,5 +1,5 @@
 const { verifyComment } = require('../validator/comment');
-const CommentModel = require('../models/comment');
+const CommentModel = require('../models/Comment');
 const { convertToCustomFormat } = require('../utils/cv');
 
 exports.addComment = async (req, res) => {
