@@ -63,7 +63,7 @@ function Header() {
             </li>
             {!user && ( // Affiche le lien Home seulement si l'utilisateur n'est pas connecté
               <li className="p-3">
-                <Link to={"/home"} className="hover:text-gray-300">
+                <Link to={"/"} className="hover:text-gray-300">
                   Home
                 </Link>
               </li>
