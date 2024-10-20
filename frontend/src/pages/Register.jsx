@@ -44,6 +44,7 @@ function Register() {
               .email('Invalid email address')
               .required('Required'),
             password: Yup.string()
+            .matches(/^(?=.[A-Z])(?=.[0-9]).+$/, 'Password must contain at least 1 uppercase and 1 number.')
               .min(6, 'Password must be at least 6 characters')
               .required('Required'),
             confirmPassword: Yup.string()

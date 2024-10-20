@@ -21,7 +21,7 @@ function GenerateCV() {
   const educationInitialValues = {
     degree: '',
     institution: '',
-    StartDate: '',
+    startDate: '',
     endDate: '',
     description: '',
   };
@@ -29,25 +29,25 @@ function GenerateCV() {
   const validationSchema = Yup.object({
     title: Yup.string().min(2, 'Must be at least 2 characters').required('Required'),
     description: Yup.string().min(3, 'Must be at least 3 characters').max(300, 'Must not be longer than 300 characters'),
-    experiences: Yup.array()
+    experience: Yup.array()
       .of(
         Yup.object().shape({
-          experienceTitle: Yup.string().required('Required'),
-          experienceCompany: Yup.string().required('Required'),
-          experienceStartDate: Yup.string().required('Required'),
-          experienceEndDate: Yup.string().required('Required'),
-          experienceDescription: Yup.string().required('Required'),
+          title: Yup.string().required('Required'),
+          company: Yup.string().required('Required'),
+          startDate: Yup.string().required('Required'),
+          endDate: Yup.string().required('Required'),
+          description: Yup.string().required('Required'),
         })
       )
       .max(3, 'You can only add up to 3 experiences'),
-    educations: Yup.array()
+    education: Yup.array()
       .of(
         Yup.object().shape({
-          educationDegree: Yup.string().required('Required'),
-          educationInstitution: Yup.string().required('Required'),
-          educationStartDate: Yup.string().required('Required'),
-          educationEndDate: Yup.string().required('Required'),
-          educationDescription: Yup.string().required('Required'),
+          degree: Yup.string().required('Required'),
+          institution: Yup.string().required('Required'),
+          startDate: Yup.string().required('Required'),
+          endDate: Yup.string().required('Required'),
+          description: Yup.string().required('Required'),
         })
       )
       .max(3, 'You can only add up to 3 educations'),
@@ -70,8 +70,8 @@ function GenerateCV() {
             user: userId,
             title: '',
             description: '',
-            experiences: [],
-            educations: [],
+            experience: [],  // Utilise "experience" pour correspondre à ton schéma
+            education: [],   // Utilise "education" pour correspondre à ton schéma
             skills: [],
             softSkills: [],
             languages: [],
@@ -81,18 +81,17 @@ function GenerateCV() {
           onSubmit={async (values, { setSubmitting }) => {
             try {
               console.log('Valeurs soumises :', values);
-              console.log(values.experiences)
-              console.log(values.educations)
-              console.log(values.softSkills)
-    if (!Array.isArray(values.experiences) || values.experiences.length === 0) {
-      console.error('Aucune expérience fournie.');
-      return;
-    }
 
-    if (!Array.isArray(values.educations) || values.educations.length === 0) {
-      console.error('Aucune éducation fournie.');
-      return;
-    }
+              if (!Array.isArray(values.experience) || values.experience.length === 0) {
+                console.error('Aucune expérience fournie.');
+                return;
+              }
+
+              if (!Array.isArray(values.education) || values.education.length === 0) {
+                console.error('Aucune éducation fournie.');
+                return;
+              }
+
               const response = await fetch('http://localhost:5001/api/cv/create', {
                 method: 'POST',
                 headers: {
@@ -138,34 +137,34 @@ function GenerateCV() {
                 <div className="text-2xl font-normal text-[#394A2E]">
                   <p>Talk about your latest experiences</p>
                 </div>
-                <FieldArray name="experiences">
+                <FieldArray name="experience">
                   {({ remove, push }) => (
                     <div>
-                      {Array.isArray(values.experiences) && values.experiences.map((experience, index) => (
+                      {Array.isArray(values.experience) && values.experience.map((exp, index) => (
                         <div className="flex flex-col pb-3" key={index}>
-                          <Field type="text" name={`experiences.${index}.title`} placeholder="Job Title" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200" />
-                          <ErrorMessage name={`experiences.${index}.title`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`experience.${index}.title`} placeholder="Job Title" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200" />
+                          <ErrorMessage name={`experience.${index}.title`} component="div" className="text-red-500 text-sm" />
 
-                          <Field type="text" name={`experiences.${index}.company`} placeholder="Company" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
-                          <ErrorMessage name={`experiences.${index}.company`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`experience.${index}.company`} placeholder="Company" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
+                          <ErrorMessage name={`experience.${index}.company`} component="div" className="text-red-500 text-sm" />
 
-                          <Field type="text" name={`experiences.${index}.startDate`} placeholder="Start Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
-                          <ErrorMessage name={`experiences.${index}.startDate`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`experience.${index}.startDate`} placeholder="Start Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
+                          <ErrorMessage name={`experience.${index}.startDate`} component="div" className="text-red-500 text-sm" />
 
-                          <Field type="text" name={`experiences.${index}.endDate`} placeholder="End Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
-                          <ErrorMessage name={`experiences.${index}.endDate`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`experience.${index}.endDate`} placeholder="End Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
+                          <ErrorMessage name={`experience.${index}.endDate`} component="div" className="text-red-500 text-sm" />
 
-                          <Field as="textarea" name={`experiences.${index}.description`} placeholder="Description" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" rows="4" />
-                          <ErrorMessage name={`experiences.${index}.description`} component="div" className="text-red-500 text-sm" />
+                          <Field as="textarea" name={`experience.${index}.description`} placeholder="Description" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" rows="4" />
+                          <ErrorMessage name={`experience.${index}.description`} component="div" className="text-red-500 text-sm" />
 
-                          {values.experiences.length > 1 && (
+                          {values.experience.length > 1 && (
                             <button type="button" className="text-red-500 mt-2" onClick={() => remove(index)}>
                               Remove Experience
                             </button>
                           )}
                         </div>
                       ))}
-                      {values.experiences.length < 3 && (
+                      {values.experience.length < 3 && (
                         <button type="button" className="text-green-500 mt-4" onClick={() => push(experienceInitialValues)}>
                           Add Experience
                         </button>
@@ -178,34 +177,34 @@ function GenerateCV() {
                 <div className="text-2xl font-normal text-[#394A2E]">
                   <p>Tell me about your education</p>
                 </div>
-                <FieldArray name="educations">
+                <FieldArray name="education">
                   {({ remove, push }) => (
                     <div>
-                      {Array.isArray(values.educations) && values.educations.map((education, index) => (
+                      {Array.isArray(values.education) && values.education.map((edu, index) => (
                         <div className="flex flex-col pb-3" key={index}>
-                          <Field type="text" name={`educations.${index}.degree`} placeholder="Degree" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200" />
-                          <ErrorMessage name={`educations.${index}.degree`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`education.${index}.degree`} placeholder="Degree" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200" />
+                          <ErrorMessage name={`education.${index}.degree`} component="div" className="text-red-500 text-sm" />
 
-                          <Field type="text" name={`educations.${index}.institution`} placeholder="Institution" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
-                          <ErrorMessage name={`educations.${index}.institution`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`education.${index}.institution`} placeholder="Institution" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
+                          <ErrorMessage name={`education.${index}.institution`} component="div" className="text-red-500 text-sm" />
 
-                          <Field type="text" name={`educations.${index}.startDate`} placeholder="Start Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
-                          <ErrorMessage name={`educations.${index}.startDate`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`education.${index}.startDate`} placeholder="Start Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
+                          <ErrorMessage name={`education.${index}.startDate`} component="div" className="text-red-500 text-sm" />
 
-                          <Field type="text" name={`educations.${index}.endDate`} placeholder="End Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
-                          <ErrorMessage name={`educations.${index}.endDate`} component="div" className="text-red-500 text-sm" />
+                          <Field type="text" name={`education.${index}.endDate`} placeholder="End Date (YYYY-MM-DD)" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" />
+                          <ErrorMessage name={`education.${index}.endDate`} component="div" className="text-red-500 text-sm" />
 
-                          <Field as="textarea" name={`educations.${index}.description`} placeholder="Description" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" rows="4" />
-                          <ErrorMessage name={`educations.${index}.description`} component="div" className="text-red-500 text-sm" />
+                          <Field as="textarea" name={`education.${index}.description`} placeholder="Description" className="w-full p-3 border border-[#394A2E] rounded-md bg-gray-200 mt-2" rows="4" />
+                          <ErrorMessage name={`education.${index}.description`} component="div" className="text-red-500 text-sm" />
 
-                          {values.educations.length > 1 && (
+                          {values.education.length > 1 && (
                             <button type="button" className="text-red-500 mt-2" onClick={() => remove(index)}>
                               Remove Education
                             </button>
                           )}
                         </div>
                       ))}
-                      {values.educations.length < 3 && (
+                      {values.education.length < 3 && (
                         <button type="button" className="text-green-500 mt-4" onClick={() => push(educationInitialValues)}>
                           Add Education
                         </button>
