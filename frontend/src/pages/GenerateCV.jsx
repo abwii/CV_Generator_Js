@@ -34,8 +34,8 @@ function GenerateCV() {
         Yup.object().shape({
           title: Yup.string().required('Required'),
           company: Yup.string().required('Required'),
-          startDate: Yup.string().required('Required').matches(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
-          endDate: Yup.string().required('Required').matches(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
+          startDate: Yup.date().required('Required').typeError('Invalid date format'),
+          endDate: Yup.date().required('Required').typeError('Invalid date format'),
           description: Yup.string().required('Required'),
         })
       )
@@ -45,8 +45,8 @@ function GenerateCV() {
         Yup.object().shape({
           degree: Yup.string().required('Required'),
           institution: Yup.string().required('Required'),
-          startDate: Yup.string().required('Required').matches(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
-          endDate: Yup.string().required('Required').matches(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
+          startDate: Yup.date().required('Required').typeError('Invalid date format'),
+          endDate: Yup.date().required('Required').typeError('Invalid date format'),
           description: Yup.string().required('Required'),
         })
       )
