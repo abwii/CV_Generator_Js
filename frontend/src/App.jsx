@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useContext } from "react";
+import { Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import MyAccount from "./pages/MyAccount";
+import MyCv from "./pages/MyCv";
+import AllCvs from "./pages/AllCvs";
+import GenerateCV from "./pages/GenerateCV";
+import { UserContext } from './context/UserContext';
+import UpdateCv from "./pages/UpdateCv";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { getUserInfos } = useContext(UserContext);
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Header />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        {/* Si l'utilisateur est connecté, la route par défaut est "allcvs", sinon c'est "home" */}
+        {getUserInfos() ? (
+          <Route index path="/" element={<AllCvs />} />
+        ) : (
+          <Route index path="/" element={<Home />} />
+        )}
+        
+        {/* Autres routes */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/myaccount" element={<MyAccount />} />
+        <Route path="/mycv" element={<MyCv />} />
+        <Route path="/allcvs" element={<AllCvs />} />
+        <Route path="/generatemycv" element={<GenerateCV />} />
+        <Route path="/updatecv" element={<UpdateCv/>}/>
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
