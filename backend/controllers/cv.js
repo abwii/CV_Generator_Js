@@ -72,8 +72,8 @@ module.exports = {
                 education: req.body.education,
                 experience: req.body.experience,
                 skills: req.body.skills,
-                softSkills: req.body.skills,
-                languages: req.body.skills,
+                softSkills: req.body.softSkills,
+                languages: req.body.languages,
                 visible: req.body.visible
             });
 
