@@ -4,6 +4,7 @@ const commentController = require('../controllers/comment');
 const { verifyUser } = require("../middlewares/jwt");
 
 router.post('/add', verifyUser, commentController.addComment);
-router.delete('/delete/:commentId', verifyUser, commentController.deleteComment);
+router.delete('/delete/:id', verifyUser, commentController.deleteComment);
+router.get('/all/:id', verifyUser, commentController.getAllComments);
 
 module.exports = router;
