@@ -18,7 +18,7 @@ const UserProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');  // Supprime l'utilisateur du localStorage
-    navigate('/home'); 
+    navigate('/'); 
   };
 
   // Récupère les informations de l'utilisateur depuis l'état ou le localStorage
