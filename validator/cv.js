@@ -19,6 +19,14 @@ module.exports = {
                         pattern: "User must be a valid MongoDB ObjectId format"
                     }
                 },
+                title: {
+                    type: 'string',
+                    minLength: 2,
+                    errorMessage: {
+                        type: "Title must be a string",
+                        minLength: "Title cannot be empty"
+                    }
+                },
                 description: {
                     type: 'string',
                     minLength: 3,
@@ -145,12 +153,36 @@ module.exports = {
                         type: "Skills must be an array of strings"
                     }
                 },
+                softSkills: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        errorMessage: {
+                            type: "Each skill must be a string"
+                        }
+                    },
+                    errorMessage: {
+                        type: "Skills must be an array of strings"
+                    }
+                },
+                languages: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        errorMessage: {
+                            type: "Each skill must be a string"
+                        }
+                    },
+                    errorMessage: {
+                        type: "Skills must be an array of strings"
+                    }
+                },
                 visible: {
                     type: 'boolean',
                     default: true
                 }
             },
-            required: ['user', 'description', 'skills']
+            required: ['user', 'title', 'description', 'skills', 'softSkills', 'languages']
         };
 
         let result = validator.validate(cv, cvSchema);

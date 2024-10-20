@@ -55,10 +55,13 @@ const formatExperience = (experience) => {
 const formatCVResponse = (cv) => {
     return {
         id: cv._id,
+        title: cv.title,
         description: cv.description,
         education: formatEducation(cv.education),
         experience: formatExperience(cv.experience),
         skills: cv.skills,
+        softSkills: cv.softSkills,
+        languages: cv.languages,
         visible: cv.visible,
         user: {
             id: cv.user.userId,

@@ -67,10 +67,13 @@ module.exports = {
 
             const newCV = new CVModel({
                 user,
+                title: req.body.title,
                 description: req.body.description,
                 education: req.body.education,
                 experience: req.body.experience,
                 skills: req.body.skills,
+                softSkills: req.body.skills,
+                languages: req.body.skills,
                 visible: req.body.visible
             });
 
@@ -96,11 +99,20 @@ module.exports = {
             const newCV = { ...req.body };
             const updateFields = {};
 
+            if (newCV.titre && newCV.titre !== existingCV.titre) {
+                updateFields.titre = newCV.titre;
+            }
             if (newCV.description && newCV.description !== existingCV.description) {
                 updateFields.description = newCV.description;
             }
             if (newCV.skills && JSON.stringify(newCV.skills) !== JSON.stringify(existingCV.skills)) {
                 updateFields.skills = newCV.skills;
+            }
+            if (newCV.skills && JSON.stringify(newCV.softSkills) !== JSON.stringify(existingCV.softSkills)) {
+                updateFields.softSkills = newCV.softSkills;
+            }
+            if (newCV.skills && JSON.stringify(newCV.languages) !== JSON.stringify(existingCV.languages)) {
+                updateFields.languages = newCV.languages;
             }
             if (newCV.visible !== undefined && newCV.visible !== existingCV.visible) {
                 updateFields.visible = newCV.visible;
